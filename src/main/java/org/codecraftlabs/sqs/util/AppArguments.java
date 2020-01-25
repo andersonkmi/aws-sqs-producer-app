@@ -4,7 +4,6 @@ import java.util.Map;
 
 public class AppArguments {
     public static final String SQS_URL_OPTION = "sqsUrl";
-    public static final String REGION_OPTION = "region";
     public static final String INTERVAL_SECONDS_OPTION = "intervalSeconds";
 
     private Map<String, String> arguments;

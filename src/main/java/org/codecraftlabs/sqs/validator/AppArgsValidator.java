@@ -19,7 +19,6 @@ public class AppArgsValidator {
 
     public static AppArgsValidator build() {
         AppArgsValidator instance = new AppArgsValidator();
-        instance.policies.add(new RegionOptionValidationPolicy());
         return instance;
     }
 
