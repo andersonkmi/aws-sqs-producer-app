@@ -3,12 +3,9 @@ package org.codecraftlabs.sqs.util;
 import java.util.Map;
 
 public class AppArguments {
-    public static final String SERVICE_OPTION = "service";
-    public static final String BUCKET_OPTION = "bucket";
+    public static final String SQS_URL_OPTION = "sqsUrl";
     public static final String REGION_OPTION = "region";
-    public static final String OBJECT_OPTION = "object";
-    public static final String KEY_OPTION = "key";
-    public static final String CONTENT_TYPE = "contentType";
+    public static final String INTERVAL_SECONDS_OPTION = "intervalSeconds";
 
     private Map<String, String> arguments;
 
