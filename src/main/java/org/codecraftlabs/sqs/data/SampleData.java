@@ -1,9 +1,12 @@
 package org.codecraftlabs.sqs.data;
 
+import java.time.Instant;
+
 public class SampleData {
     private String id;
     private String name;
     private String programmingLanguage;
+    private Instant creationDate;
 
     public void setId(String id) {
         this.id = id;
@@ -27,5 +30,13 @@ public class SampleData {
 
     public String getProgrammingLanguage() {
         return programmingLanguage;
+    }
+
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Instant getCreationDate() {
+        return creationDate;
     }
 }
