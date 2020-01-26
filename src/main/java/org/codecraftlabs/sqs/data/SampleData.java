@@ -39,4 +39,9 @@ public class SampleData {
     public Instant getCreationDate() {
         return creationDate;
     }
+
+    @Override
+    public String toString() {
+        return "";
+    }
 }
