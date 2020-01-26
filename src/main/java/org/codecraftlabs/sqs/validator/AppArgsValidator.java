@@ -10,17 +10,15 @@ import java.util.Set;
 
 public class AppArgsValidator {
     private static final Logger logger = LogManager.getLogger(AppArgsValidator.class);
-
     private Set<AppArgumentsValidationPolicy> policies;
 
     private AppArgsValidator() {
         policies = new LinkedHashSet<>();
+        policies.add(new UrlValidationPolicy());
     }
 
     public static AppArgsValidator build() {
-        AppArgsValidator instance = new AppArgsValidator();
-        instance.policies.add(new UrlValidationPolicy());
-        return instance;
+        return new AppArgsValidator();
     }
 
     public void validate(@Nonnull AppArguments args) throws InvalidArgumentException {

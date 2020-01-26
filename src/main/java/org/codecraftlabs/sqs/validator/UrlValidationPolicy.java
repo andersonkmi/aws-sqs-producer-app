@@ -16,6 +16,7 @@ class UrlValidationPolicy implements AppArgumentsValidationPolicy {
 
     @Override
     public void verify(@Nonnull AppArguments args) throws InvalidArgumentException {
+        logger.info("Applying policy");
         var url = args.option(SQS_URL_OPTION);
         String regex = "<\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]>";
 
