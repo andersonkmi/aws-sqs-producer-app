@@ -28,7 +28,7 @@ repositories {
 dependencies {
     // AWS related
     implementation platform('software.amazon.awssdk:bom:2.5.29')
-    implementation 'software.amazon.awssdk:s3'
+    implementation 'software.amazon.awssdk:sqs'
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.0-jre'
@@ -44,6 +44,7 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-api:2.13.0'
     compile 'org.apache.logging.log4j:log4j-core:2.13.0'
     compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.0'
+    compile 'com.google.code.gson:gson:2.8.6'
 
     // Including Apache CLI
     compile 'commons-cli:commons-cli:1.4'
