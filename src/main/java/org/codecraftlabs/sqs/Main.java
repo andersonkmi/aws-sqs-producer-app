@@ -2,11 +2,14 @@ package org.codecraftlabs.sqs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.codecraftlabs.sqs.data.SampleData;
 import org.codecraftlabs.sqs.service.AWSException;
 import org.codecraftlabs.sqs.service.AWSServiceExecutor;
 import org.codecraftlabs.sqs.util.CommandLineException;
 import org.codecraftlabs.sqs.util.CommandLineUtil;
 import org.codecraftlabs.sqs.validator.InvalidArgumentException;
+
+import java.time.Instant;
 
 import static org.codecraftlabs.sqs.util.CommandLineUtil.help;
 import static org.codecraftlabs.sqs.validator.AppArgsValidator.build;
@@ -23,8 +26,12 @@ public class Main {
             var cliValidator = build();
             cliValidator.validate(arguments);
 
+            var sampleData = new SampleData();
+            sampleData.setCreationDate(Instant.now());
+            sampleData.setId("123456");
+            sampleData.setName("sqs-test-app");
             var serviceExecutor = new AWSServiceExecutor();
-            serviceExecutor.execute(arguments);
+            serviceExecutor.execute(arguments, sampleData);
 
             logger.info("Finishing app");
         } catch (AWSException exception) {
