@@ -32,22 +32,23 @@ public class Main {
     }
 
     private void registerShutdownHook() {
-        System.out.println("Registering shutdown hook");
+        logger.info("Registering shutdown hook");
 
-        this.shutdownThread = new Thread("myhook") {
+        this.shutdownThread = new Thread("ShutdownHook") {
             public void run() {
                 synchronized(this) {
                     if (!readyToExit) {
                         isVMShuttingDown = true;
-                        System.out.println("Control-C detected... Terminating process, please wait.");
+                        logger.info("Control-C detected... Terminating process, please wait.");
                         try {
                             // Wait up to 1.5 secs for a record to be processed.
                             wait(1500);
                         } catch (InterruptedException ignore) {
-
+                            // ignore exception
                         }
+
                         if (!readyToExit) {
-                            System.err.println("Main processing interrupted.");
+                            logger.info("Main processing interrupted.");
                         }
                     }
                 }
@@ -59,7 +60,7 @@ public class Main {
 
     /** Unregister the shutdown hook. */
     private void unregisterShutdownHook() {
-        System.out.println("Unregistering shutdown hook");
+        logger.warn("Unregistering shutdown hook");
         try {
             Runtime.getRuntime().removeShutdownHook(this.shutdownThread);
         } catch (IllegalStateException ignore) {
@@ -92,11 +93,12 @@ public class Main {
                 Thread.sleep(intervalValue * 1000);
 
                 if (isVMShuttingDown) {
-                    logger.info("Finishing app");
                     signalReadyToExit();
                     break;
                 }
             }
+
+            logger.info("Finishing app");
             unregisterShutdownHook();
         } catch (AWSException exception) {
             logger.error(exception.getMessage(), exception);

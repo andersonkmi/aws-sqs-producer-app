@@ -31,7 +31,7 @@ public class AWSServiceExecutor {
                 .build();
         try {
             var response = sqsClient.sendMessage(request);
-            logger.info(String.format("Message successfully send: '%s'",
+            logger.info(String.format("Message successfully posted: '%s'",
                     response.messageId()));
         } catch (Exception exception) {
             throw new AWSException("SQS operation failed", exception);
