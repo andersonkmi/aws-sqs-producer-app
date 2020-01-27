@@ -28,13 +28,11 @@ public class AWSServiceExecutor {
         var request = SendMessageRequest.builder()
                 .queueUrl(sqsUrl)
                 .messageBody(gson.toJson(data))
-                .delaySeconds(10)
                 .build();
         try {
             var response = sqsClient.sendMessage(request);
-            logger.info(String.format("Message successfully send: '%s' - '%s'",
-                    response.messageId(),
-                    response.sequenceNumber()));
+            logger.info(String.format("Message successfully send: '%s'",
+                    response.messageId()));
         } catch (Exception exception) {
             throw new AWSException("SQS operation failed", exception);
         }
