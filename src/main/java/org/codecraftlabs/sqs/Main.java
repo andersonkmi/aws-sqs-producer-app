@@ -13,6 +13,7 @@ import org.codecraftlabs.sqs.validator.InvalidArgumentException;
 import java.time.Instant;
 import java.util.UUID;
 
+import static java.lang.Long.valueOf;
 import static org.codecraftlabs.sqs.util.AppArguments.INTERVAL_SECONDS_OPTION;
 import static org.codecraftlabs.sqs.util.CommandLineUtil.help;
 import static org.codecraftlabs.sqs.validator.AppArgsValidator.build;
@@ -41,7 +42,7 @@ public class Main {
                 serviceExecutor.execute(arguments, sampleData);
 
                 var interval = arguments.option(INTERVAL_SECONDS_OPTION);
-                var intervalValue = Long.valueOf(interval);
+                var intervalValue = valueOf(interval);
                 Thread.sleep(intervalValue * 1000);
             }
 
