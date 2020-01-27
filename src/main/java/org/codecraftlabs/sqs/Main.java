@@ -11,6 +11,7 @@ import org.codecraftlabs.sqs.util.CommandLineUtil;
 import org.codecraftlabs.sqs.validator.InvalidArgumentException;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import static org.codecraftlabs.sqs.util.AppArguments.INTERVAL_SECONDS_OPTION;
 import static org.codecraftlabs.sqs.util.CommandLineUtil.help;
@@ -29,9 +30,11 @@ public class Main {
             cliValidator.validate(arguments);
 
             while (true) {
+                var uuid = UUID.randomUUID();
                 var sampleData = new SampleData();
                 sampleData.setCreationDate(Instant.now());
-                sampleData.setId("123456");
+
+                sampleData.setId(uuid.toString());
                 sampleData.setName("sqs-test-app");
                 sampleData.setProgrammingLanguage("java");
                 var serviceExecutor = new AWSServiceExecutor();
