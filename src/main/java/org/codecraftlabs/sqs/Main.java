@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.codecraftlabs.sqs.data.SampleData;
 import org.codecraftlabs.sqs.service.AWSException;
 import org.codecraftlabs.sqs.service.AWSServiceExecutor;
-import org.codecraftlabs.sqs.util.AppArguments;
 import org.codecraftlabs.sqs.util.CommandLineException;
 import org.codecraftlabs.sqs.util.CommandLineUtil;
 import org.codecraftlabs.sqs.validator.InvalidArgumentException;
@@ -13,15 +12,62 @@ import org.codecraftlabs.sqs.validator.InvalidArgumentException;
 import java.time.Instant;
 import java.util.UUID;
 
-import static java.lang.Long.valueOf;
 import static org.codecraftlabs.sqs.util.AppArguments.INTERVAL_SECONDS_OPTION;
 import static org.codecraftlabs.sqs.util.CommandLineUtil.help;
 import static org.codecraftlabs.sqs.validator.AppArgsValidator.build;
 
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
+    private boolean isVMShuttingDown = false;
+    private boolean readyToExit = false;
+    private Thread shutdownThread;
 
-    public static void main(String[] args) {
+    public Main() {
+        registerShutdownHook();
+    }
+
+    private synchronized void signalReadyToExit() {
+        this.readyToExit = true;
+        this.notify();
+    }
+
+    private void registerShutdownHook() {
+        System.out.println("Registering shutdown hook");
+
+        this.shutdownThread = new Thread("myhook") {
+            public void run() {
+                synchronized(this) {
+                    if (!readyToExit) {
+                        isVMShuttingDown = true;
+                        System.out.println("Control-C detected... Terminating process, please wait.");
+                        try {
+                            // Wait up to 1.5 secs for a record to be processed.
+                            wait(1500);
+                        } catch (InterruptedException ignore) {
+
+                        }
+                        if (!readyToExit) {
+                            System.err.println("Main processing interrupted.");
+                        }
+                    }
+                }
+            }
+        };
+
+        Runtime.getRuntime().addShutdownHook(this.shutdownThread);
+    }
+
+    /** Unregister the shutdown hook. */
+    private void unregisterShutdownHook() {
+        System.out.println("Unregistering shutdown hook");
+        try {
+            Runtime.getRuntime().removeShutdownHook(this.shutdownThread);
+        } catch (IllegalStateException ignore) {
+            // VM already was shutting down
+        }
+    }
+
+    public void start(String[] args) {
         logger.info("Starting app");
         try {
             var commandLineUtil = new CommandLineUtil();
@@ -42,16 +88,25 @@ public class Main {
                 serviceExecutor.execute(arguments, sampleData);
 
                 var interval = arguments.option(INTERVAL_SECONDS_OPTION);
-                var intervalValue = valueOf(interval);
+                var intervalValue = Long.parseLong(interval);
                 Thread.sleep(intervalValue * 1000);
-            }
 
-            //logger.info("Finishing app");
+                if (isVMShuttingDown) {
+                    logger.info("Finishing app");
+                    signalReadyToExit();
+                    break;
+                }
+            }
+            unregisterShutdownHook();
         } catch (AWSException exception) {
             logger.error(exception.getMessage(), exception);
         } catch (InvalidArgumentException | IllegalArgumentException | CommandLineException | InterruptedException exception) {
             logger.error("Failed to parse command line options", exception);
             help();
         }
+    }
+
+    public static void main(String[] args) {
+        new Main().start(args);
     }
 }
