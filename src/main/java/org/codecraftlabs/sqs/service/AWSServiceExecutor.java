@@ -18,6 +18,7 @@ public class AWSServiceExecutor {
     public AWSServiceExecutor() {
         sqsClient = SqsClient.builder().build();
     }
+
     public void execute(@NonNull AppArguments args, @NonNull SampleData data) throws AWSException {
         var sqsUrl = args.option(SQS_URL_OPTION);
 
