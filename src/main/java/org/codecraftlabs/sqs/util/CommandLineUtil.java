@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.codecraftlabs.sqs.util.AppArguments.INTERVAL_SECONDS_OPTION;
+import static org.codecraftlabs.sqs.util.AppArguments.OPERATION_OPTION;
 import static org.codecraftlabs.sqs.util.AppArguments.SQS_URL_OPTION;
 
 public class CommandLineUtil {
@@ -21,8 +22,10 @@ public class CommandLineUtil {
 
     public static final String SQS_URL_OPT = "s";
     public static final String INTERVAL_SECONDS_OPT = "i";
+    public static final String OPERATION_OPT = "o";
 
     final private static Options cmdLineOpts = new Options().addRequiredOption(SQS_URL_OPT, SQS_URL_OPTION, true, "SQS url")
+            .addRequiredOption(OPERATION_OPT, OPERATION_OPTION, true, "Operation to be performed")
             .addRequiredOption(INTERVAL_SECONDS_OPT, INTERVAL_SECONDS_OPTION, true, "Interval in seconds");
 
     public CommandLineUtil() {
