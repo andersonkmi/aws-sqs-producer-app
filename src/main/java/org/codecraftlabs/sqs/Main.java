@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codecraftlabs.sqs.data.SampleData;
 import org.codecraftlabs.sqs.service.AWSException;
-import org.codecraftlabs.sqs.service.AWSServiceExecutor;
+import org.codecraftlabs.sqs.service.SQSProducerService;
 import org.codecraftlabs.sqs.util.CommandLineException;
 import org.codecraftlabs.sqs.util.CommandLineUtil;
 import org.codecraftlabs.sqs.validator.InvalidArgumentException;
@@ -13,6 +13,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 import static org.codecraftlabs.sqs.util.AppArguments.INTERVAL_SECONDS_OPTION;
+import static org.codecraftlabs.sqs.util.AppArguments.OPERATION_OPTION;
+import static org.codecraftlabs.sqs.util.AppArguments.SEND_MESSAGE_OPERATION;
 import static org.codecraftlabs.sqs.util.CommandLineUtil.help;
 import static org.codecraftlabs.sqs.validator.AppArgsValidator.build;
 
@@ -77,26 +79,31 @@ public class Main {
             var cliValidator = build();
             cliValidator.validate(arguments);
 
-            while (true) {
-                var uuid = UUID.randomUUID();
-                var sampleData = new SampleData();
-                sampleData.setCreationDate(Instant.now());
+            if (arguments.option(OPERATION_OPTION).equals(SEND_MESSAGE_OPERATION)) {
+                while (true) {
+                    var uuid = UUID.randomUUID();
+                    var sampleData = new SampleData();
+                    sampleData.setCreationDate(Instant.now());
 
-                sampleData.setId(uuid.toString());
-                sampleData.setName("sqs-test-app");
-                sampleData.setProgrammingLanguage("java");
-                var serviceExecutor = new AWSServiceExecutor();
-                serviceExecutor.execute(arguments, sampleData);
+                    sampleData.setId(uuid.toString());
+                    sampleData.setName("sqs-test-app");
+                    sampleData.setProgrammingLanguage("java");
+                    var serviceExecutor = new SQSProducerService();
+                    serviceExecutor.execute(arguments, sampleData);
 
-                var interval = arguments.option(INTERVAL_SECONDS_OPTION);
-                var intervalValue = Long.parseLong(interval);
-                Thread.sleep(intervalValue * 1000);
+                    var interval = arguments.option(INTERVAL_SECONDS_OPTION);
+                    var intervalValue = Long.parseLong(interval);
+                    Thread.sleep(intervalValue * 1000);
 
-                if (isVMShuttingDown) {
-                    signalReadyToExit();
-                    break;
+                    if (isVMShuttingDown) {
+                        signalReadyToExit();
+                        break;
+                    }
                 }
+            } else {
+                // include implementation here
             }
+
 
             logger.info("Finishing app");
             unregisterShutdownHook();

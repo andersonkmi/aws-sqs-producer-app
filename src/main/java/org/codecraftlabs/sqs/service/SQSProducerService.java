@@ -11,11 +11,11 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 import static org.codecraftlabs.sqs.util.AppArguments.SQS_URL_OPTION;
 
-public class AWSServiceExecutor {
-    private static final Logger logger = LogManager.getLogger(AWSServiceExecutor.class);
+public class SQSProducerService {
+    private static final Logger logger = LogManager.getLogger(SQSProducerService.class);
     private SqsClient sqsClient;
 
-    public AWSServiceExecutor() {
+    public SQSProducerService() {
         sqsClient = SqsClient.builder().build();
     }
 
@@ -38,4 +38,5 @@ public class AWSServiceExecutor {
             throw new AWSException("SQS operation failed", exception);
         }
     }
+
 }
