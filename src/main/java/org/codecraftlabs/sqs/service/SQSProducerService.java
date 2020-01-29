@@ -35,6 +35,7 @@ public class SQSProducerService {
             logger.info(String.format("Message successfully posted: '%s'",
                     response.messageId()));
         } catch (Exception exception) {
+            logger.error("SQS operation failed", exception);
             throw new AWSException("SQS operation failed", exception);
         }
     }
