@@ -81,6 +81,7 @@ public class Main {
             var cliValidator = build();
             cliValidator.validate(arguments);
 
+            var interval = arguments.option(INTERVAL_SECONDS_OPTION);
             if (arguments.option(OPERATION_OPTION).equals(SEND_MESSAGE_OPERATION)) {
                 while (true) {
                     var uuid = UUID.randomUUID();
@@ -93,8 +94,8 @@ public class Main {
                     var serviceExecutor = new SQSProducerService();
                     serviceExecutor.execute(arguments, sampleData);
 
-                    var interval = arguments.option(INTERVAL_SECONDS_OPTION);
                     var intervalValue = Long.parseLong(interval);
+                    logger.info(String.format("Pausing for %d seconds", intervalValue));
                     Thread.sleep(intervalValue * 1000);
 
                     if (isVMShuttingDown) {
@@ -107,8 +108,8 @@ public class Main {
                     var serviceExecutor = new SQSConsumerService();
                     serviceExecutor.execute(arguments);
 
-                    var interval = arguments.option(INTERVAL_SECONDS_OPTION);
                     var intervalValue = Long.parseLong(interval);
+                    logger.info(String.format("Pausing for %d seconds", intervalValue));
                     Thread.sleep(intervalValue * 1000);
 
                     if (isVMShuttingDown) {

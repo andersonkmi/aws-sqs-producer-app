@@ -20,7 +20,7 @@ class OperationValidationPolicy implements AppArgumentsValidationPolicy {
         logger.info("Applying policy");
         var operation = args.option(OPERATION_OPTION);
 
-        if (!Objects.equals(operation, SEND_MESSAGE_OPERATION) || !Objects.equals(operation, RECV_MESSAGE_OPERATION)) {
+        if (!Objects.equals(operation, SEND_MESSAGE_OPERATION) && !Objects.equals(operation, RECV_MESSAGE_OPERATION)) {
             throw new InvalidArgumentException("Invalid operation argument");
         }
     }

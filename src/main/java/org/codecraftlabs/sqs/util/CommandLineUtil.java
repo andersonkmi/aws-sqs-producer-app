@@ -41,6 +41,7 @@ public class CommandLineUtil {
             var cmdLine = commandLineParser.parse(cmdLineOpts, args);
             options.put(SQS_URL_OPTION, cmdLine.getOptionValue(SQS_URL_OPT));
             options.put(INTERVAL_SECONDS_OPTION, cmdLine.getOptionValue(INTERVAL_SECONDS_OPT));
+            options.put(OPERATION_OPTION, cmdLine.getOptionValue(OPERATION_OPT));
 
             return new AppArguments(options);
         } catch (ParseException exception) {
