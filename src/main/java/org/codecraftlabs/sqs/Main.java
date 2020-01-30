@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codecraftlabs.sqs.data.SampleData;
 import org.codecraftlabs.sqs.service.AWSException;
+import org.codecraftlabs.sqs.service.SQSConsumerService;
 import org.codecraftlabs.sqs.service.SQSProducerService;
 import org.codecraftlabs.sqs.util.CommandLineException;
 import org.codecraftlabs.sqs.util.CommandLineUtil;
@@ -101,9 +102,20 @@ public class Main {
                     }
                 }
             } else {
-                // include implementation here
-            }
+                while (true) {
+                    var serviceExecutor = new SQSConsumerService();
+                    serviceExecutor.execute(arguments);
 
+                    var interval = arguments.option(INTERVAL_SECONDS_OPTION);
+                    var intervalValue = Long.parseLong(interval);
+                    Thread.sleep(intervalValue * 1000);
+
+                    if (isVMShuttingDown) {
+                        signalReadyToExit();
+                        break;
+                    }
+                }
+            }
 
             logger.info("Finishing app");
             unregisterShutdownHook();
