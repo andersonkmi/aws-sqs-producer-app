@@ -22,13 +22,13 @@ public class SQSConsumerService {
         try {
             var receiveMessageRequest = ReceiveMessageRequest.builder()
                     .queueUrl(arguments.option(SQS_URL_OPTION))
-                    .maxNumberOfMessages(5)
+                    .maxNumberOfMessages(10)
                     .build();
 
             var messages= sqsClient.receiveMessage(receiveMessageRequest).messages();
 
-            messages.forEach(item -> {
-                var body = item.body();
+            messages.forEach(message -> {
+                var body = message.body();
                 logger.info(String.format("Message: '%s'", body));
             });
 

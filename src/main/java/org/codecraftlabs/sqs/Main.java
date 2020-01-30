@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static org.codecraftlabs.sqs.util.AppArguments.INTERVAL_SECONDS_OPTION;
 import static org.codecraftlabs.sqs.util.AppArguments.OPERATION_OPTION;
+import static org.codecraftlabs.sqs.util.AppArguments.RECV_MESSAGE_OPERATION;
 import static org.codecraftlabs.sqs.util.AppArguments.SEND_MESSAGE_OPERATION;
 import static org.codecraftlabs.sqs.util.CommandLineUtil.help;
 import static org.codecraftlabs.sqs.validator.AppArgsValidator.build;
@@ -101,7 +102,7 @@ public class Main {
                         break;
                     }
                 }
-            } else {
+            } else if (arguments.option(OPERATION_OPTION).equals(RECV_MESSAGE_OPERATION)) {
                 while (true) {
                     var serviceExecutor = new SQSConsumerService();
                     serviceExecutor.execute(arguments);
