@@ -10,7 +10,6 @@ import org.codecraftlabs.sqs.util.CommandLineException;
 import org.codecraftlabs.sqs.util.CommandLineUtil;
 import org.codecraftlabs.sqs.validator.InvalidArgumentException;
 
-import java.time.Instant;
 import java.util.UUID;
 
 import static org.codecraftlabs.sqs.util.AppArguments.INTERVAL_SECONDS_OPTION;
