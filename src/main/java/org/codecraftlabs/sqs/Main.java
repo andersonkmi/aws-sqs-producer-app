@@ -86,7 +86,6 @@ public class Main {
                 while (true) {
                     var uuid = UUID.randomUUID();
                     var sampleData = new SampleData();
-                    sampleData.setCreationDate(Instant.now());
 
                     sampleData.setId(uuid.toString());
                     sampleData.setName("sqs-test-app");

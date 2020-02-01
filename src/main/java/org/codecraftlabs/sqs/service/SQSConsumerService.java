@@ -33,6 +33,7 @@ public class SQSConsumerService {
             });
 
             messages.forEach(message -> {
+                logger.info(String.format("Deleting message '%s'", message.receiptHandle()));
                 var deleteRequest = DeleteMessageRequest.builder().queueUrl(arguments.option(SQS_URL_OPTION)).receiptHandle(message.receiptHandle()).build();
                 sqsClient.deleteMessage(deleteRequest);
             });

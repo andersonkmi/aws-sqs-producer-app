@@ -1,6 +1,5 @@
 package org.codecraftlabs.sqs.service;
 
-import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -22,18 +21,14 @@ public class SQSProducerService {
     public void execute(@NonNull AppArguments args, @NonNull SampleData data) throws AWSException {
         var sqsUrl = args.option(SQS_URL_OPTION);
 
-        var gsonBuilder = new GsonBuilder();
-        gsonBuilder.setPrettyPrinting().serializeNulls();
-        var gson = gsonBuilder.create();
-
         var request = SendMessageRequest.builder()
                 .queueUrl(sqsUrl)
-                .messageBody(gson.toJson(data))
+                .messageBody(data.toString())
                 .build();
+
         try {
             var response = sqsClient.sendMessage(request);
-            logger.info(String.format("Message successfully posted: '%s'",
-                    response.messageId()));
+            logger.info(String.format("Message successfully posted: '%s'", response.messageId()));
         } catch (Exception exception) {
             logger.error("SQS operation failed", exception);
             throw new AWSException("SQS operation failed", exception);
